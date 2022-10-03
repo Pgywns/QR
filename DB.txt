@@ -1,0 +1,35 @@
+<meta charset="utf-8">
+
+<?php
+
+$name = $_POST["name"];
+$phone = $_POST["phone"];
+$address = $_POST["address"];
+
+$con = mysqli_connect("localhost", "root", "1234", "test");
+
+$sql = "SELECT name FROM bogunso where phone = $phone";
+
+$result = mysqli_query($con, $sql);
+
+if (mysqli_num_rows($result) > 0) {
+	echo "정상입니다.";
+	$sql = "insert into info(name, phone, address, DBreturn)";
+	$sql.= "values('$name', '$phone', '$address', 1)";
+
+	exec("sudo python /home/pi/green.py");
+
+   }else{
+   	echo "일치하는 데이터가 없습니다.";
+	$sql = "insert into info(name, phone, address, DBreturn)";
+	$sql.= "values('$name', '$phone', '$address', 0)";
+
+	exec("sudo python /home/pi/red.py");
+   }
+
+
+mysqli_query($con, $sql);
+
+mysqli_close($con);
+
+?>
